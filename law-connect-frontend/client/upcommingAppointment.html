@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Appointments</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+  <h2 class="mb-4">My Upcoming Appointments</h2>
+
+  <div id="appointments-container" class="row g-3">
+    <!-- Appointments will load here -->
+  </div>
+</div>
+
+<script>
+const clientId = 1; // Replace with logged-in client ID (from session/auth)
+function getCookie(name){
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? match[2] : null;
+}
+async function getUSer(){
+try{
+    const token = getCookie("userToken");      
+    if(token === null){
+      window.location.href = "/index.html"
+    }
+    const res = await fetch(`http://localhost:8080/api/users/get`,{
+        method : "GET",
+        headers : {
+            "Content-Type" : "application/json",
+            "Authorization" : "Bearer " + token
+        }
+    });
+    const user = await res.json();
+    clientId = user.id;
+}
+catch (err) {
+    console.error("Error loading appointments:", err);
+  }
+}
+const apiUrl = `http://localhost:8080/api/appointments/client/{clientId}/upcoming`;
+
+async function loadAppointments() {
+  try {
+    const res = await fetch(apiUrl);
+    const data = await res.json();
+
+    const container = document.getElementById("appointments-container");
+    container.innerHTML = "";
+
+    const confirmed = data.filter(app => app.status === "CONFIRMED");
+
+    if (confirmed.length === 0) {
+      container.innerHTML = `<p class="text-muted">No upcoming confirmed appointments.</p>`;
+      return;
+    }
+
+    confirmed.forEach(app => {
+      const card = document.createElement("div");
+      card.className = "col-md-6";
+
+      const startTime = new Date(app.appointmentTime).toLocaleString();
+      const endTime = new Date(app.slot.endTime).toLocaleString();
+
+      card.innerHTML = `
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <h5 class="card-title">Appointment #${app.id}</h5>
+            <p class="card-text"><strong>Start:</strong> ${startTime}</p>
+            <p class="card-text"><strong>End:</strong> ${endTime}</p>
+            <a href="${app.meetLink}" target="_blank" class="btn btn-success">Join Meeting</a>
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  } catch (err) {
+    console.error("Error loading appointments:", err);
+  }
+}
+
+loadAppointments();
+</script>
+
+</body>
+</html>

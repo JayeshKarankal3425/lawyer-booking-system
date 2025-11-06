@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Appointment Slot | LawConnect</title>
+  
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary: #64748b;
+      --accent: #f59e0b;
+      --light: #f8fafc;
+      --dark: #1e293b;
+      --success: #10b981;
+      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9fafb;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+    
+    /* Navbar Styling */
+    .navbar {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      padding: 0.8rem 0;
+    }
+    
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+    }
+    
+    .navbar-brand i {
+      margin-right: 8px;
+    }
+    
+    .nav-link {
+      font-weight: 500;
+      color: var(--dark);
+      position: relative;
+      margin: 0 0.5rem;
+      transition: var(--transition);
+    }
+    
+    .nav-link:hover {
+      color: var(--primary);
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition);
+    }
+    
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    
+    .btn-logout {
+      background: var(--primary);
+      color: white;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: none;
+      transition: var(--transition);
+    }
+    
+    .btn-logout:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    }
+    
+    /* Page Header */
+    .page-header {
+      background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+      color: white;
+      padding: 2.5rem 0;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='0.1' d='M0,128L48,117.3C96,107,192,85,288,112C384,139,480,213,576,224C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .page-header-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .page-title {
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .page-subtitle {
+      opacity: 0.9;
+    }
+    
+    /* Form Container */
+    .form-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    
+    .form-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition);
+      padding: 2rem;
+    }
+    
+    .form-card:hover {
+      box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.15);
+    }
+    
+    .form-label {
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+    
+    .form-control {
+      padding: 0.75rem 1rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+    
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+    
+    .form-select {
+      padding: 0.75rem 1rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+    
+    .form-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+    
+    .input-group-text {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: var(--secondary);
+    }
+    
+    .btn-submit {
+      background: var(--primary);
+      color: white;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      border: none;
+      transition: var(--transition);
+      width: 100%;
+      margin-top: 1rem;
+    }
+    
+    .btn-submit:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+    
+    .btn-submit:disabled {
+      background: #cbd5e1;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    /* Message Box */
+    .message-box {
+      margin-top: 1.5rem;
+    }
+    
+    .alert {
+      border-radius: 8px;
+      border: none;
+      padding: 1rem 1.5rem;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .page-title {
+        font-size: 1.5rem;
+      }
+      
+      .form-card {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="lawyer-home.html">
+      <i class="fas fa-scale-balanced"></i>LawConnect
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="lawyer-home.html">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="lawyer-slots.html">My Slots</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="lawyer-appointments.html">My Appointments</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="lawyer-profile.html">Profile</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Page Header -->
+<div class="page-header">
+  <div class="container page-header-content text-center">
+    <h1 class="page-title">Add Appointment Slot</h1>
+    <p class="page-subtitle">Create new time slots for clients to book appointments</p>
+  </div>
+</div>
+
+<!-- Form Container -->
+<div class="form-container">
+  <div class="form-card">
+    <form id="slotForm">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="date" class="form-label">Date</label>
+          <input type="date" class="form-control" id="date" required>
+        </div>
+        
+        <div class="col-md-6 mb-3">
+          <label for="charges" class="form-label">Charges (₹)</label>
+          <div class="input-group">
+            <span class="input-group-text">₹</span>
+            <input type="number" step="0.1" class="form-control" id="charges" required>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="startTime" class="form-label">Start Time</label>
+          <input type="time" class="form-control" id="startTime" required>
+        </div>
+        
+        <div class="col-md-6 mb-3">
+          <label for="endTime" class="form-label">End Time</label>
+          <input type="time" class="form-control" id="endTime" required>
+        </div>
+      </div>
+      
+      <div class="mb-3">
+        <label for="status" class="form-label">Status</label>
+        <select class="form-select" id="status">
+          <option value="AVAILABLE">Available</option>
+        </select>
+      </div>
+      
+      <button type="submit" id="submitBtn" class="btn-submit">
+        <i class="fas fa-plus-circle me-2"></i>Create Slot
+      </button>
+    </form>
+    
+    <div id="message" class="message-box"></div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="/js/lawyer/add-slots.js"></script>
+
+</body>
+</html>

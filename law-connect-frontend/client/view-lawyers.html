@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lawyer Directory | LawConnect</title>
+  
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary: #64748b;
+      --accent: #f59e0b;
+      --light: #f8fafc;
+      --dark: #1e293b;
+      --success: #10b981;
+      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9fafb;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+    
+    /* Navbar Styling */
+    .navbar {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      padding: 0.8rem 0;
+    }
+    
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+    }
+    
+    .navbar-brand i {
+      margin-right: 8px;
+    }
+    
+    .nav-link {
+      font-weight: 500;
+      color: var(--dark);
+      position: relative;
+      margin: 0 0.5rem;
+      transition: var(--transition);
+    }
+    
+    .nav-link:hover {
+      color: var(--primary);
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition);
+    }
+    
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+      color: white;
+      padding: 4rem 0;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 3rem;
+    }
+    
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='0.1' d='M0,128L48,117.3C96,107,192,85,288,112C384,139,480,213,576,224C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .hero-title {
+      font-weight: 700;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    /* Filter Section */
+    .filter-section {
+      background: white;
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 2rem;
+    }
+    
+    .filter-label {
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+    
+    .form-control, .form-select {
+      padding: 0.75rem 1rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+    
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+    
+    .input-group-text {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: var(--secondary);
+    }
+    
+    /* Lawyer Cards */
+    .lawyer-card {
+      border: none;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition);
+      background: white;
+      height: 100%;
+    }
+    
+    .lawyer-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.15);
+    }
+    
+    .lawyer-header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      padding: 1.5rem;
+      color: white;
+      position: relative;
+    }
+    
+    .lawyer-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .lawyer-rating {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 0.35rem 0.8rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      backdrop-filter: blur(5px);
+    }
+    
+    .lawyer-name {
+      font-weight: 700;
+      font-size: 1.25rem;
+      margin-bottom: 0.25rem;
+    }
+    
+    .lawyer-specialty {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    
+    .lawyer-body {
+      padding: 1.5rem;
+    }
+    
+    .lawyer-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    
+    .lawyer-info i {
+      width: 24px;
+      color: var(--primary);
+      margin-right: 0.75rem;
+    }
+    
+    .lawyer-bio {
+      color: var(--secondary);
+      font-size: 0.95rem;
+      margin: 1.5rem 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    /* Button Container */
+    .lawyer-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    
+    /* Primary Action Button */
+    .btn-book {
+      flex: 1;
+      background: var(--primary);
+      color: white;
+      font-weight: 600;
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: none;
+      transition: var(--transition);
+    }
+    
+    .btn-book:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    }
+    
+    /* Secondary Action Button */
+    .btn-profile {
+      flex: 1;
+      background: white;
+      color: var(--primary);
+      font-weight: 600;
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: 2px solid var(--primary);
+      transition: var(--transition);
+    }
+    
+    .btn-profile:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    /* Pagination */
+    .pagination {
+      margin-top: 3rem;
+    }
+    
+    .page-link {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      margin: 0 0.25rem;
+      border: 1px solid #e2e8f0;
+      color: var(--dark);
+      font-weight: 500;
+      transition: var(--transition);
+    }
+    
+    .page-link:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+    
+    .page-item.active .page-link {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+    
+    /* Footer */
+    footer {
+      background: var(--dark);
+      color: white;
+      padding: 3rem 0 2rem;
+      margin-top: 5rem;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .footer-links a:hover {
+      color: white;
+    }
+    
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .social-links a {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.25rem;
+      transition: var(--transition);
+    }
+    
+    .social-links a:hover {
+      color: white;
+      transform: translateY(-3px);
+    }
+    
+    .copyright {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+    
+    /* Loading Animation */
+    .loading-spinner {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+    }
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(37, 99, 235, 0.1);
+      border-left-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* No Results Message */
+    .no-results {
+      text-align: center;
+      padding: 3rem;
+      color: var(--secondary);
+    }
+    
+    .no-results i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #cbd5e1;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2rem;
+      }
+      
+      .filter-section {
+        flex-direction: column;
+      }
+      
+      .lawyer-actions {
+        flex-direction: column;
+      }
+      
+      .footer-links {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="home.html">
+      <i class="fas fa-scale-balanced"></i>LawConnect
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-center">
+        <li class="nav-item">
+          <a class="nav-link" href="home.html">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="view-lawyers.html">Find Lawyers</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="appointments.html">My Appointments</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="profile.html">Profile</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container hero-content text-center">
+    <h1 class="hero-title">Find the Right Legal Expert</h1>
+    <p class="hero-subtitle">
+      Connect with experienced lawyers specialized in various fields to get the best legal assistance for your needs.
+    </p>
+  </div>
+</section>
+
+<!-- Main Content -->
+<div class="container">
+  <!-- Filter Section -->
+  <div class="filter-section d-flex flex-wrap justify-content-between align-items-end gap-3">
+    <div class="flex-grow-1">
+      <label class="filter-label">Search by Name or Specialty</label>
+      <div class="input-group">
+        <span class="input-group-text"><i class="fas fa-search"></i></span>
+        <input type="text" class="form-control" placeholder="E.g. 'Corporate Lawyer' or 'John Smith'" id="searchInput">
+      </div>
+    </div>
+    <div>
+      <label class="filter-label">Specialization</label>
+      <select class="form-select" id="specializationFilter">
+        <option value="">All Specializations</option>
+        <option value="Criminal">Criminal Law</option>
+        <option value="Family">Family Law</option>
+        <option value="Corporate">Corporate Law</option>
+        <option value="Civil">Civil Law</option>
+        <option value="Immigration">Immigration</option>
+        <option value="Intellectual Property">Intellectual Property</option>
+      </select>
+    </div>
+    <div>
+      <label class="filter-label">Experience</label>
+      <select class="form-select" id="experienceFilter">
+        <option value="">Any Experience</option>
+        <option value="0-2">0-2 years</option>
+        <option value="3-5">3-5 years</option>
+        <option value="5+">5+ years</option>
+      </select>
+    </div>
+    <div>
+      <label class="filter-label">Rating</label>
+      <select class="form-select" id="ratingFilter">
+        <option value="">Any Rating</option>
+        <option value="4+">4 stars & above</option>
+        <option value="3+">3 stars & above</option>
+        <option value="2+">2 stars & above</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Lawyer Cards -->
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="lawyer-list">
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+    </div>
+  </div>
+  
+  <!-- Pagination -->
+  <nav aria-label="Lawyer pagination" class="mt-5">
+    <ul class="pagination justify-content-center" id="pagination">
+      <!-- Pagination will be inserted here -->
+    </ul>
+  </nav>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-links">
+      <a href="#">About Us</a>
+      <a href="#">How It Works</a>
+      <a href="#">Pricing</a>
+      <a href="#">Contact</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+    </div>
+    <div class="social-links">
+      <a href="#"><i class="fab fa-facebook-f"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+    </div>
+    <p class="copyright">
+      &copy; 2025 LawConnect. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Lawyer Fetch Script -->
+<script src="/js/client/view_lawyers.js">
+</script>
+</body>
+</html>
